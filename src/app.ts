@@ -3,12 +3,20 @@ import express, { Response } from 'express';
 //import config from 'config';
 import validateEnv from './utils/validateEnv';
 import { PrismaClient } from '@prisma/client';
-
+//const bodyParser = require('body-parser');
+//cors = require('cors')
 
 validateEnv();
 
 const prisma = new PrismaClient();
 const app = express();
+
+app.use(require('cors')());
+
+// Normal express config defaults
+app.use(require('morgan')('dev'));
+app.use(require('body-parser').urlencoded({ extended: false }));
+app.use(require('body-parser').json());
 
 async function bootstrap() {
   // Testing
