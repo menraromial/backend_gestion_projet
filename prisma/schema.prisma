@@ -10,38 +10,170 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model User {
+  id       Int      @id @default(autoincrement())
+  name     String   @db.VarChar(255)
+  email    String
+  photo    String?  @default("default.png")
+  verified Boolean? @default(false)
 
-model User{
-  @@map(name: "users")
-
-  id String  @id @default(uuid())
-  name String  @db.VarChar(255)
-  email String 
-  photo String? @default("default.png")
-  verified Boolean? @default(false) 
-  
   password String
-  role RoleEnumType? @default(user)
+  role     RoleEnumType? @default(user)
 
-  verificationCode String? @db.Text
-  posts Post[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  verificationCode String?  @db.Text
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
 
   @@unique([email, verificationCode])
   @@index([email, verificationCode])
+  @@map(name: "users")
 }
 
 enum RoleEnumType {
   user
   admin
+  acteurPTF
+  agent
+  ministere
 }
 
-model Post {
-  id String  @id @default(uuid())
-  title     String
-  content   String?
-  published Boolean @default(false)
-  author    User?   @relation(fields: [authorId], references: [id])
-  authorId  String?
+model TypeProjet {
+  id    Int    @id @default(autoincrement())
+  title String @db.VarChar(255)
+}
+
+model ObjectifGlobal {
+  id               Int                @id @default(autoincrement())
+  description      String
+  objectifSpecific ObjectifSpecific[]
+  indicateur       Indicateur[]
+  hypthose         Hypothese[]
+  projet           Projet             @relation(fields: [projetId], references: [id])
+  projetId         Int                @unique
+}
+
+enum StatutProjet {
+  NON_DEBUTE
+  EN_COURS_EXECUTION
+  ACHEVE
+  ABANDONNE
+}
+
+model Projet {
+  id                    Int              @id @default(autoincrement())
+  title                 String           @db.VarChar(255)
+  description           String
+  montantAE             BigInt           @default(0)
+  montantCP             BigInt           @default(0)
+  montantCP1            BigInt           @default(0)
+  montantCP2            BigInt           @default(0)
+  manuel                String?
+  mensuel               String?
+  trimestriel           String?
+  semestriel            String?
+  consolide             Boolean          @default(false)
+  cdmt                  Boolean          @default(false)
+  pia                   Boolean          @default(false)
+  ppm                   Boolean          @default(false)
+  pp                    Boolean          @default(false)
+  pofpv                 Boolean          @default(false)
+  csge                  Boolean          @default(false)
+  psge                  Boolean          @default(false)
+  montant               BigInt           @default(0)
+  montantPreleve        BigInt           @default(0)
+  solde                 BigInt           @default(0)
+  periode               String
+  observation           String?
+  remarques             String?
+  ressourcesMaterielles String?
+  ressourcesFinancieres String?
+  ressourcesHumaines    String?
+  statutAvancement      StatutProjet?    @default(NON_DEBUTE)
+  receptionne           Boolean          @default(false)
+  probelemeFinancement  String?
+  tauxRealisation       Float            @default(0.00)
+  problemeTechnique     String?
+  defaillanceEntreprise String?
+  defaillance           String?
+  entreprise            String?
+  objectifGlobal        ObjectifGlobal[]
+  Financement           Financement[]
+  userId                Int
+  zoneId                Int
+  oddId                 Int[]
+}
+
+model Zone {
+  id                 Int    @id @default(autoincrement())
+  denomination       String
+  population         BigInt
+  population_projete BigInt
+  superficie         BigInt
+  densite            Float
+}
+
+model ObjectifSpecific {
+  id               Int             @id @default(autoincrement())
+  description      String
+  Tache            Tache[]
+  indicateur       Indicateur[]
+  hypothese        Hypothese[]
+  objectifGlobal   ObjectifGlobal? @relation(fields: [objectifGlobalId], references: [id])
+  objectifGlobalId Int?
+}
+
+model Tache {
+  id                 Int               @id @default(autoincrement())
+  title              String
+  description        String
+  objectifSpecific   ObjectifSpecific? @relation(fields: [objectifSpecificId], references: [id])
+  objectifSpecificId Int?
+  zoneId             Int
+}
+
+enum TypePayement {
+  ORANGE_MONEY
+  MTN_MOBILE
+  VISA
+  CASH
+}
+
+model Financement {
+  id              Int           @id @default(autoincrement())
+  date            DateTime      @default(now())
+  montant         BigInt
+  methodePaiement TypePayement? @default(CASH)
+  projet          Projet        @relation(fields: [projetId], references: [id])
+  projetId        Int
+  userId          Int
+}
+
+model Indicateur {
+  id                 Int               @id @default(autoincrement())
+  nature             String
+  type               String
+  impact             String
+  niveau             String
+  objectifSpecific   ObjectifSpecific? @relation(fields: [objectifSpecificId], references: [id])
+  objectifSpecificId Int?
+  objectifGlobal     ObjectifGlobal?   @relation(fields: [objectifGlobalId], references: [id])
+  objectifGlobalId   Int?
+  tacheId            Int?
+}
+
+model ODD {
+  id          Int     @id @default(autoincrement())
+  titre       String
+  description String?
+  objectifs   String
+}
+
+model Hypothese {
+  id                 Int               @id @default(autoincrement())
+  hypothese          String
+  resultat           String?
+  objectifGlobal     ObjectifGlobal?   @relation(fields: [objectifGlobalId], references: [id])
+  objectifGlobalId   Int?
+  objectifSpecific   ObjectifSpecific? @relation(fields: [objectifSpecificId], references: [id])
+  objectifSpecificId Int?
 }
