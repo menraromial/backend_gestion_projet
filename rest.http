@@ -1,0 +1,58 @@
+
+#GET http://localhost:8000/api/v1/typeprojet/getall
+
+##
+#GET http://localhost:8000/api/v1/projet/getall
+
+#GET http://localhost:8000/api/v1/projet/getall
+
+#POST  http://localhost:8000/api/v1/typeprojet/create
+#Content-Type: application/json
+#GET http://localhost:8000/api/v1/projet/get/2
+
+#DELETE  http://localhost:8000/api/v1/projet/delete/1
+
+POST   http://localhost:8000/api/v1/projet/create
+Content-Type: application/json
+
+{
+  "title": "Projet 2",
+  "description": "Premier projet",
+  "montantAE": 100000,
+  "montantCP": 50000,
+  "montantCP1": 4000,
+  "montantCP2": 4000,
+  "manuel": null,
+  "mensuel": null,
+  "trimestriel": null,
+  "semestriel": null,
+  "consolide": false,
+  "cdmt": false,
+  "pia": false,
+  "ppm": false,
+  "pp": false,
+  "pofpv": false,
+  "csge": false,
+  "psge": false,
+  "montant": 1000000,
+  "montantPreleve": 200000,
+  "solde": 0,
+  "periode": "Janvier 2024 - Janvier 2025",
+  "observation": null,
+  "remarques": null,
+  "ressourcesMaterielles": null,
+  "ressourcesFinancieres": null,
+  "ressourcesHumaines": null,
+  "statutAvancement": "NON_DEBUTE",
+  "receptionne": false,
+  "probelemeFinancement": null,
+  "tauxRealisation": 0,
+  "problemeTechnique": null,
+  "defaillanceEntreprise": null,
+  "defaillance": null,
+  "entreprise": null,
+  "userId": 1,
+  "zoneId": 1,
+  "oddId": [],
+  "typeProjetId": 2
+}

@@ -1,0 +1,4 @@
+{
+    "status": "error",
+    "message": "\nInvalid `prisma.projet.findMany()` invocation in\nE:\\projects\\backend\\gestion_projet_backend\\src\\services\\projet.service.ts:38:33\n\n  35     where: Partial<Prisma.ProjetWhereInput>,\n  36     select?: Prisma.ProjetSelect\n  37 ) => {\n→ 38     return (await prisma.projet.findMany({\n           where: {\n         +   zoneId: {\n         +     equals: Int | IntFieldRefInput,\n         +     in: Int[] | ListIntFieldRefInput,\n         +     notIn: Int[] | ListIntFieldRefInput,\n         +     lt: Int | IntFieldRefInput,\n         +     lte: Int | IntFieldRefInput,\n         +     gt: Int | IntFieldRefInput,\n         +     gte: Int | IntFieldRefInput,\n         +     not: Int | NestedIntFilter\n         +   }\n           },\n           select: undefined\n         })\n\nArgument `zoneId` is missing."
+}

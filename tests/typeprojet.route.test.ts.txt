@@ -1,0 +1,59 @@
+// FILEPATH: /e:/projects/backend/gestion_projet_backend/src/routes/typeprojet.route.test.ts
+import request from 'supertest';
+import express from 'express';
+import TypeprojetController from '../src/controllers/typeprojet.controller';
+import router from '../src/routes/typeprojet.route';
+
+jest.mock('../controllers/typeprojet.controller');
+
+const app = express();
+app.use(express.json());
+app.use(router);
+
+describe('Typeprojet routes', () => {
+    it('should create a new typeprojet', async () => {
+        const mockTypeProjet = { /* your test data */ };
+        TypeprojetController.createTypeProjet.mockImplementation((req, res, next) => res.status(201).json(mockTypeProjet));
+
+        const res = await request(app).post('/create').send(mockTypeProjet);
+        expect(res.statusCode).toEqual(201);
+        expect(res.body).toEqual(mockTypeProjet);
+    });
+
+    it('should get all typeprojets', async () => {
+        const mockTypeProjets = [ /* your test data */ ];
+        TypeprojetController.getTypeProjets.mockImplementation((req, res, next) => res.status(200).json(mockTypeProjets));
+
+        const res = await request(app).get('/getall');
+        expect(res.statusCode).toEqual(200);
+        expect(res.body).toEqual(mockTypeProjets);
+    });
+
+    it('should get a typeprojet by id', async () => {
+        const mockTypeProjet = { /* your test data */ };
+        const id = 1; // replace with your test id
+        TypeprojetController.getTypeProjet.mockImplementation((req, res, next) => res.status(200).json(mockTypeProjet));
+
+        const res = await request(app).get(`/get/${id}`);
+        expect(res.statusCode).toEqual(200);
+        expect(res.body).toEqual(mockTypeProjet);
+    });
+
+    it('should update a typeprojet by id', async () => {
+        const mockTypeProjet = { /* your test data */ };
+        const id = 1; // replace with your test id
+        TypeprojetController.updateTypeProjet.mockImplementation((req, res, next) => res.status(200).json(mockTypeProjet));
+
+        const res = await request(app).put(`/update/${id}`).send(mockTypeProjet);
+        expect(res.statusCode).toEqual(200);
+        expect(res.body).toEqual(mockTypeProjet);
+    });
+
+    it('should delete a typeprojet by id', async () => {
+        const id = 1; // replace with your test id
+        TypeprojetController.deleteTypeProjet.mockImplementation((req, res, next) => res.status(200).json({}));
+
+        const res = await request(app).delete(`/delete/${id}`);
+        expect(res.statusCode).toEqual(200);
+    });
+});

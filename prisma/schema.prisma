@@ -38,8 +38,9 @@ enum RoleEnumType {
 }
 
 model TypeProjet {
-  id    Int    @id @default(autoincrement())
-  title String @db.VarChar(255)
+  id      Int      @id @default(autoincrement())
+  title   String   @db.VarChar(255)
+  projets Projet[]
 }
 
 model ObjectifGlobal {
@@ -48,8 +49,8 @@ model ObjectifGlobal {
   objectifSpecific ObjectifSpecific[]
   indicateur       Indicateur[]
   hypthose         Hypothese[]
-  projet           Projet             @relation(fields: [projetId], references: [id])
-  projetId         Int                @unique
+  projet           Projet?             @relation(fields: [projetId], references: [id])
+  projetId         Int?                @unique
 }
 
 enum StatutProjet {
@@ -63,10 +64,10 @@ model Projet {
   id                    Int              @id @default(autoincrement())
   title                 String           @db.VarChar(255)
   description           String
-  montantAE             BigInt           @default(0)
-  montantCP             BigInt           @default(0)
-  montantCP1            BigInt           @default(0)
-  montantCP2            BigInt           @default(0)
+  montantAE             Int           @default(0)
+  montantCP             Int           @default(0)
+  montantCP1            Int           @default(0)
+  montantCP2            Int           @default(0)
   manuel                String?
   mensuel               String?
   trimestriel           String?
@@ -79,9 +80,9 @@ model Projet {
   pofpv                 Boolean          @default(false)
   csge                  Boolean          @default(false)
   psge                  Boolean          @default(false)
-  montant               BigInt           @default(0)
-  montantPreleve        BigInt           @default(0)
-  solde                 BigInt           @default(0)
+  montant               Int           @default(0)
+  montantPreleve        Int           @default(0)
+  solde                 Int           @default(0)
   periode               String
   observation           String?
   remarques             String?
@@ -101,14 +102,16 @@ model Projet {
   userId                Int
   zoneId                Int
   oddId                 Int[]
+  typeProjet            TypeProjet?      @relation(fields: [typeProjetId], references: [id])
+  typeProjetId          Int?
 }
 
 model Zone {
   id                 Int    @id @default(autoincrement())
   denomination       String
-  population         BigInt
-  population_projete BigInt
-  superficie         BigInt
+  population         Int
+  population_projete Int
+  superficie         Int
   densite            Float
 }
 
@@ -141,7 +144,7 @@ enum TypePayement {
 model Financement {
   id              Int           @id @default(autoincrement())
   date            DateTime      @default(now())
-  montant         BigInt
+  montant         Int
   methodePaiement TypePayement? @default(CASH)
   projet          Projet        @relation(fields: [projetId], references: [id])
   projetId        Int

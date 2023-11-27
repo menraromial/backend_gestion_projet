@@ -10,6 +10,8 @@ import AppError from './utils/appError';
 //const bodyParser = require('body-parser');
 //cors = require('cors')
 import TypeProjetRouter from './routes/typeprojet.route'
+import ProjetRouter from './routes/projet.route'
+import ObjectifGlobalRouter from './routes/objectifglobal.route'
 
 validateEnv();
 
@@ -42,6 +44,8 @@ async function bootstrap() {
 
     // Register API routes
     app.use("/api/v1/typeprojet", TypeProjetRouter);
+    app.use("/api/v1/projet", ProjetRouter);
+    app.use("/api/v1/objectifglobal",ObjectifGlobalRouter);
 
     // UNHANDLED ROUTES
     app.all('*', (req: Request, res: Response, next: NextFunction) => {
