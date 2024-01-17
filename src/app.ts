@@ -12,6 +12,11 @@ import AppError from './utils/appError';
 import TypeProjetRouter from './routes/typeprojet.route'
 import ProjetRouter from './routes/projet.route'
 import ObjectifGlobalRouter from './routes/objectifglobal.route'
+import HypotheseRouter from './objectif/routes/hypothese.route'
+import IndicateurRouter from './objectif/routes/indicateur.route'
+import ObjectifglobalRouter from './objectif/routes/objectifglobal.route'
+import ObjectifspecifiqueRouter from './objectif/routes/objectifspecifique.route'
+
 
 validateEnv();
 
@@ -24,10 +29,20 @@ async function bootstrap() {
       // 2. Cors
     app.use(
         cors({
-          origin: [config.get<string>('origin')],
-          credentials: true,
+          origin: ['http://localhost:3001','http://localhost:3000'],
+          credentials:true,            //access-control-allow-credentials:true
+          optionSuccessStatus:200
         })
       );
+
+    app.use((req : Request,res :Response,next : NextFunction)=>{
+
+    res.header('Access-Control-Allow-Origin','*');
+    res.header('Access-Control-Allow-Methods','GET,POST,PUT,DELETE');
+    res.header('Access-Control-Allow-Headers','Origin, X-Requested-With, Content, Accept,Content-Type,Authorization');
+    
+    return next();
+})
 
       // 3. Logger
       if (process.env.NODE_ENV === 'development') app.use(morgan('dev'));
@@ -47,6 +62,11 @@ async function bootstrap() {
     app.use("/api/v1/projet", ProjetRouter);
     app.use("/api/v1/objectifglobal",ObjectifGlobalRouter);
 
+    app.use("/api/v1/hypothese", HypotheseRouter);
+    app.use("/api/v1/indicateur", IndicateurRouter);
+    app.use("/api/v1/objectifglobal", ObjectifglobalRouter);
+    app.use("/api/v1/objectifspecifique", ObjectifspecifiqueRouter);
+    
     // UNHANDLED ROUTES
     app.all('*', (req: Request, res: Response, next: NextFunction) => {
       next(new AppError(404, `Route ${req.originalUrl} not found`));

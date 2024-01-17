@@ -17,6 +17,7 @@ export const createObjectifGlobalHandler =async (
     next:NextFunction
 ) => {
     const { projetId, description } = req.body
+    console.log("req.body",req.body)
     try {
         const projet = await prisma.projet.findUnique({
             where: {
@@ -25,9 +26,9 @@ export const createObjectifGlobalHandler =async (
         })
         const newObjectifGlobal = await createObjectifGlobal({
             description: description,
-            //projetId:projetId
         })
         newObjectifGlobal.projetId = Number(projetId)
+        console.log("newObjectifGlobal",newObjectifGlobal)
         res.status(201).json(newObjectifGlobal)
     } catch (error) {
         res.status(500).json({error: error})
